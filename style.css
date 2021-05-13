@@ -1,0 +1,19 @@
+.board {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.field {
+    background-color: #cccccc;
+    height: 150px;
+    width: 150px;
+    margin: 3px;
+}
+
+.center {
+    text-align: center;
+    color: #888888;
+    font-size: 40px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
