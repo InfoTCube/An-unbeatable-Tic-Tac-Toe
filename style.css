@@ -11,9 +11,34 @@
     margin: 3px;
 }
 
-.center {
+.title-text {
     text-align: center;
     color: #888888;
     font-size: 40px;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.circle {
+    height: 120px;
+    width: 120px;
+    background-color: #006eff;
+    border-radius: 50%;
+}
+
+.small-circle {
+    height: 100px;
+    width: 100px;
+    background-color: #cccccc;
+    border-radius: 50%;
+}
+
+.cross {
+    height: 120px;
+    width: 120px;
+}
+
+.center-children {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
