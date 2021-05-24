@@ -11,7 +11,7 @@ function startGame() : void {
     resetArray();
     whoStarts++;
     whoStarts %= 2;
-    whoStarts = 0;
+    whoStarts = 1;
     moveCount = 0;
     if(whoStarts === 1) {
         enemyMove();
@@ -155,8 +155,11 @@ function convertToString(num : number) : string {
 
 function enemyMove() {
 
-    if(moveCount === 0) {
-
+    if(moveCount === 0 && whoStarts === 1) {
+        let place : number = firstRandom();
+        board[place] = 2;
+        updateBoard(convertToString(place));
+        moveCount++;
     } else if(AICloseToWin() !== -1) {
         let place : number = AICloseToWin();
         board[place] = 2;
@@ -164,6 +167,16 @@ function enemyMove() {
         moveCount++;
     } else if(playerCloseToWin() !== -1) {
         let place : number = playerCloseToWin();
+        board[place] = 2;
+        updateBoard(convertToString(place));
+        moveCount++;
+    } else if(moveCount === 2 && whoStarts === 1) {
+        let place : number = inCorner();
+        board[place] = 2;
+        updateBoard(convertToString(place));
+        moveCount++;
+    } else if(moveCount === 4 && whoStarts === 1) {
+        let place : number = destroy();
         board[place] = 2;
         updateBoard(convertToString(place));
         moveCount++;
@@ -510,22 +523,100 @@ function random() : number {
     let result : number = -1;
     if(board[0] == 0) {
         result = 0;
-    } else if(board[1] == 0) {
+    } else if(board[1] === 0) {
         result = 1;
-    } else if(board[2] == 0) {
+    } else if(board[2] === 0) {
         result = 2;
-    } else if(board[3] == 0) {
+    } else if(board[3] === 0) {
         result = 3;
-    } else if(board[4] == 0) {
+    } else if(board[4] === 0) {
         result = 4;
-    } else if(board[5] == 0) {
+    } else if(board[5] === 0) {
         result = 5;
-    } else if(board[6] == 0) {
+    } else if(board[6] === 0) {
         result = 6;
-    } else if(board[7] == 0) {
+    } else if(board[7] === 0) {
         result = 7;
-    } else if(board[8] == 0) {
+    } else if(board[8] === 0) {
         result = 8;
     }
     return result;
+}
+
+function firstRandom() : number {
+    let corner : number = Math.floor(Math.random()*4);
+        switch(corner) {
+            case 1:
+                corner = 2;
+                break;
+            case 2:
+                corner = 6
+                break;
+            case 3:
+                corner = 8;
+                break;
+    }
+    return corner;
+}
+
+function inCorner() : number {
+    let out : number = 0;
+    if(board[0] === 2) {
+        out = edge(0)
+    } else if(board[2] === 2) {
+        out = edge(2)
+    } else if(board[6] === 2) {
+        out = edge(6)
+    } else if(board[8] === 2) {
+        out = edge(8)
+    }
+    return out;
+}
+
+function edge(corner : number) : number {
+    if(board[1] === 1) {
+        if(corner == 0) {
+            return 6;
+        } else if(corner == 2) {
+            return 8;
+        } else if(corner == 6) {
+            return 0;
+        } else if(corner == 8) {
+            return 2;
+        } 
+    } else if(board[3] === 1) {
+        if(corner == 0) {
+            return 2;
+        } else if(corner == 2) {
+            return 0;
+        } else if(corner == 6) {
+            return 8;
+        } else if(corner == 8) {
+            return 6;
+        } 
+    } else if(board[5] === 1) {
+        if(corner == 0) {
+            return 2;
+        } else if(corner == 2) {
+            return 0;
+        } else if(corner == 6) {
+            return 8;
+        } else if(corner == 8) {
+            return 6;
+        } 
+    } else if(board[7] === 1) {
+        if(corner == 0) {
+            return 6;
+        } else if(corner == 2) {
+            return 8;
+        } else if(corner == 6) {
+            return 0;
+        } else if(corner == 8) {
+            return 2;
+        } 
+    }
+}
+
+function destroy() : number {
+    return 4;
 }
