@@ -1,5 +1,6 @@
 var moveCount : number = 0;
 var whoStarts : number = Math.floor(Math.random() * 2);
+var cornerAttack : boolean = false;
 
 let board : Array<number> = [];
 
@@ -9,10 +10,8 @@ window.onload = () => {
 
 function startGame() : void {
     resetArray();
-    whoStarts++;
-    whoStarts %= 2;
-    whoStarts = 1;
     moveCount = 0;
+    cornerAttack = false;
     if(whoStarts === 1) {
         enemyMove();
     }
@@ -176,7 +175,7 @@ function enemyMove() {
         updateBoard(convertToString(place));
         moveCount++;
     } else if(moveCount === 4 && whoStarts === 1) {
-        let place : number = destroy();
+        let place : number = destroy(cornerAttack);
         board[place] = 2;
         updateBoard(convertToString(place));
         moveCount++;
@@ -550,7 +549,7 @@ function firstRandom() : number {
                 corner = 2;
                 break;
             case 2:
-                corner = 6
+                corner = 6;
                 break;
             case 3:
                 corner = 8;
@@ -562,13 +561,65 @@ function firstRandom() : number {
 function inCorner() : number {
     let out : number = 0;
     if(board[0] === 2) {
-        out = edge(0)
+        if(board[2] === 1) {
+            out = 6;
+            cornerAttack = true;
+        } else if(board[6] === 1) {
+            out = 2;
+            cornerAttack = true;
+        } else if(board[8] === 1) {
+            out = 6;
+            cornerAttack = true;
+        } else if(board[4] === 1) {
+            out = 8;
+        } else {
+            out = edge(0);
+        }
     } else if(board[2] === 2) {
-        out = edge(2)
+        if(board[0] === 1) {
+            out = 8;
+            cornerAttack = true;
+        } else if(board[6] === 1) {
+            out = 0;
+            cornerAttack = true;
+        } else if(board[8] === 1) {
+            out = 0;
+            cornerAttack = true;
+        } else if(board[4] === 1) {
+            out = 6;
+        } else {
+            out = edge(2);
+        }
     } else if(board[6] === 2) {
-        out = edge(6)
+        if(board[0] === 1) {
+            out = 8;
+            cornerAttack = true;
+        } else if(board[2] === 1) {
+            out = 8;
+            cornerAttack = true;
+        } else if(board[8] === 1) {
+            out = 0;
+            cornerAttack = true;
+        } else if(board[4] === 1) {
+            out = 2;
+        } else {
+            out = edge(6);
+        }
     } else if(board[8] === 2) {
-        out = edge(8)
+        if(board[0] === 1) {
+            out = 2;
+            cornerAttack = true;
+        } else if(board[2] === 1) {
+            out = 6;
+            cornerAttack = true;
+        } else if(board[6] === 1) {
+            out = 2;
+            cornerAttack = true;
+        } else if(board[4] === 1) {
+            out = 0;
+        } else {
+            out = edge(8);
+        }
     }
     return out;
 }
@@ -617,6 +668,17 @@ function edge(corner : number) : number {
     }
 }
 
-function destroy() : number {
+function destroy(corner : boolean) : number {
+    if(corner) {
+        if(board[0] === 0) {
+            return 0;
+        } else if(board[2] === 0) {
+            return 2;
+        } else if(board[6] === 0) {
+            return 6;
+        } else if(board[8] === 0) {
+            return 8;
+        }
+    }
     return 4;
 }
